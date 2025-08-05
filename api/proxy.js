@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-
+    //Comment to checking
     if(!data.ok) return res.status(500).json({ error: 'Failed to fetch colors' });
 
     return res.status(200).json({ colors: data.candidates[0].content.parts[0].text });
