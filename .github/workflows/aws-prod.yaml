@@ -41,5 +41,5 @@ jobs:
     - name: Deploy to Lambda
       run: |
         aws lambda update-function-code \
-          --function-name figma-proxy-function \
+          --function-name figma-proxy \
           --zip-file fileb://lambda-deployment.zip
