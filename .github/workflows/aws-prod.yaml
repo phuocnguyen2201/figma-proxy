@@ -27,7 +27,7 @@ jobs:
     - name: Create deployment package
       run: |
         mkdir -p deployment
-        cp api/proxy.mjs deployment/index.js
+        cp api/proxy.js deployment/index.mjs
         cd deployment
         zip -r ../lambda-deployment.zip .
     
