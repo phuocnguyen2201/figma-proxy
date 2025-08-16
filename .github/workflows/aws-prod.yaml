@@ -3,10 +3,10 @@ name: Deploy Lambda Function
 on:
   push:
     branches:
-      - aws-prod
+      - main
   pull_request:
     branches:
-      - aws-prod
+      - main
 
 jobs:
   deploy:
