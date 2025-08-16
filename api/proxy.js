@@ -1,5 +1,9 @@
 export const handler = async (event) => {
-  const headers = {'content-type': 'application/json' ,'X-goog-api-key': `${process.env.GOOGLE_GEMINI_API_KEY}`};
+  const headers = {'content-type': 'application/json' ,
+    'X-goog-api-key': `${process.env.GOOGLE_GEMINI_API_KEY}`, 
+    'Access-Control-Allow-Origin':'*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers':'Content-Type, Authorization'};
   const content = [{parts: [{text: 'Give 4 random colors pattern with hex code, just the hex code, make it an array'}]}];
   
   const response = await fetch(
