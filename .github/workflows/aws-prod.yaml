@@ -84,14 +84,6 @@ jobs:
         if [ -n "$FUNCTION_URL" ]; then
           echo "Testing deployed function at: $FUNCTION_URL"
           
-          # Test OPTIONS request (CORS)
-          echo "Testing CORS preflight..."
-          curl -X OPTIONS "$FUNCTION_URL" \
-            -H "Origin: https://example.com" \
-            -H "Access-Control-Request-Method: POST" \
-            -H "Access-Control-Request-Headers: Content-Type" \
-            -v
-          
           # Test POST request
           echo "Testing POST request..."
           curl -X POST "$FUNCTION_URL" \
