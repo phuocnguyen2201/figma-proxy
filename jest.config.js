@@ -24,8 +24,10 @@ module.exports = {
   // Module file extensions
   moduleFileExtensions: ['js', 'json'],
   
-  // Transform configuration
-  transform: {},
+  // Transform configuration for ES6 modules
+  transform: {
+    '^.+\\.js$': 'babel-jest'
+  },
   
   // Test timeout
   testTimeout: 10000,

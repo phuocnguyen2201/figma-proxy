@@ -1,4 +1,4 @@
-const handler = async (event) => {
+export const handler = async (event) => {
     // Handle CORS preflight request
 
     const headers = {'content-type': 'application/json' ,'X-goog-api-key': `${process.env.GOOGLE_GEMINI_API_KEY}`};
@@ -31,6 +31,4 @@ const handler = async (event) => {
         };
     }
 };
-
-module.exports = { handler };
   

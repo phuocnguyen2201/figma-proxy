@@ -1,4 +1,4 @@
-const { handler } = require('../api/index.js');
+import { handler } from '../api/index.js';
 
 // Mock fetch globally
 global.fetch = jest.fn();

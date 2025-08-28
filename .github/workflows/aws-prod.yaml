@@ -79,7 +79,7 @@ jobs:
     - name: Test deployed API
       run: |
         # Get the Lambda function URL or API Gateway endpoint
-        FUNCTION_URL=$(aws lambda get-function --function-name figma-proxy --query 'Configuration.FunctionUrl' --output text 2>/dev/null || echo "")
+        FUNCTION_URL=$(aws apigatewayv2 get-apis   --query "Items[?ApiId=='7kuewabujh'].ApiEndpoint" --output text || echo "")
         
         if [ -n "$FUNCTION_URL" ]; then
           echo "Testing deployed function at: $FUNCTION_URL"
