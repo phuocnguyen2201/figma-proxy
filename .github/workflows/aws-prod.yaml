@@ -26,16 +26,6 @@ jobs:
     
     - name: Run unit tests
       run: npm test
-    
-    - name: Run tests with coverage
-      run: npm run test:coverage
-    
-    - name: Upload coverage reports
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage/lcov.info
-        flags: unittests
-        name: codecov-umbrella
 
   deploy:
     runs-on: ubuntu-latest
@@ -72,10 +62,11 @@ jobs:
         aws lambda update-function-code \
           --function-name figma-proxy \
           --zip-file fileb://lambda-deployment.zip
-    
-    - name: Wait for deployment
-      run: sleep 30
-    
+
+  E2EAfterDeployed:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps: 
     - name: Test deployed API
       run: |
         # Get the Lambda function URL or API Gateway endpoint
