@@ -1,4 +1,4 @@
-name: Deploy Lambda Function
+name: Deploy and Test Lambda Function
 
 on:
   push:
@@ -9,8 +9,37 @@ on:
       - main
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Run unit tests
+      run: npm test
+    
+    - name: Run tests with coverage
+      run: npm run test:coverage
+    
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+
   deploy:
     runs-on: ubuntu-latest
+    needs: test
     
     steps:
     - name: Checkout code
@@ -43,3 +72,49 @@ jobs:
         aws lambda update-function-code \
           --function-name figma-proxy \
           --zip-file fileb://lambda-deployment.zip
+    
+    - name: Wait for deployment
+      run: sleep 30
+    
+    - name: Test deployed API
+      run: |
+        # Get the Lambda function URL or API Gateway endpoint
+        FUNCTION_URL=$(aws lambda get-function --function-name figma-proxy --query 'Configuration.FunctionUrl' --output text 2>/dev/null || echo "")
+        
+        if [ -n "$FUNCTION_URL" ]; then
+          echo "Testing deployed function at: $FUNCTION_URL"
+          
+          # Test OPTIONS request (CORS)
+          echo "Testing CORS preflight..."
+          curl -X OPTIONS "$FUNCTION_URL" \
+            -H "Origin: https://example.com" \
+            -H "Access-Control-Request-Method: POST" \
+            -H "Access-Control-Request-Headers: Content-Type" \
+            -v
+          
+          # Test POST request
+          echo "Testing POST request..."
+          curl -X POST "$FUNCTION_URL" \
+            -H "Content-Type: application/json" \
+            -d '{"test": "data"}' \
+            -v
+        else
+          echo "No function URL found, testing via AWS CLI invoke..."
+          
+          # Test via AWS CLI invoke
+          aws lambda invoke \
+            --function-name figma-proxy \
+            --payload '{"httpMethod": "POST", "body": "{\"test\": \"data\"}"}' \
+            --cli-binary-format raw-in-base64-out \
+            response.json
+          
+          cat response.json
+        fi
+    
+    - name: Health check verification
+      run: |
+        # Verify the function is responding
+        aws lambda get-function --function-name figma-proxy --query 'Configuration.State' --output text
+        
+        # Check function configuration
+        aws lambda get-function-configuration --function-name figma-proxy --query 'Environment.Variables' --output table

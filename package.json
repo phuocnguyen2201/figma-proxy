@@ -1,8 +1,35 @@
 {
-    "name": "figma-proxy",
-    "version": "1.0.0",
-    "dependencies": {
-      "node-fetch": "^3.3.2"
-    }
-  }
+  "name": "figma-proxy",
+  "version": "1.0.0",
+  "description": "Figma proxy API with testing support",
+  "main": "api/index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:unit": "jest --testPathPattern=unit",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:run": "node tests/run-tests.js",
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "nodemon": "^3.0.2"
+  },
+
+  "keywords": [
+    "figma",
+    "proxy",
+    "api",
+    "lambda",
+    "aws"
+  ],
+  "author": "",
+  "license": "MIT"
+}
   
