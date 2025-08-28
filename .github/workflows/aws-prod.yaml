@@ -107,6 +107,3 @@ jobs:
       run: |
         # Verify the function is responding
         aws lambda get-function --function-name figma-proxy --query 'Configuration.State' --output text
-        
-        # Check function configuration
-        aws lambda get-function-configuration --function-name figma-proxy --query 'Environment.Variables' --output table
